@@ -1,0 +1,6 @@
+{
+  "name": "DeadlineGuard AI",
+  "description": "Intelligent Student Task & Deadline Management System with explainable AI prioritization, study planning, and analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

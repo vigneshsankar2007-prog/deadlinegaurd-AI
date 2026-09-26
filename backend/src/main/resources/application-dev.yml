@@ -1,0 +1,46 @@
+# ==============================================================================
+# DEADLINEGUARD AI - DEVELOPMENT PROFILE (application-dev.yml)
+# ==============================================================================
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    # DEV ONLY: Fallback credentials for local developer workstations only.
+    # Overridden by environment variables DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD.
+    # Under no circumstances should these fallbacks be used in staging or production.
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:deadlineguard_db}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8&createDatabaseIfNotExist=true
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:rootpassword}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      pool-name: DeadlineGuardHikariDevPool
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      auto-commit: true
+      connection-test-query: SELECT 1
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+          batch_size: 25
+        order_inserts: true
+        order_updates: true
+
+# Development JWT Configuration (requires JWT_SECRET from environment or IDE run configuration)
+jwt:
+  secret: ${JWT_SECRET}
+  expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+
