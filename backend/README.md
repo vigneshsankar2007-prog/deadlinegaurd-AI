@@ -142,3 +142,24 @@ openssl rand -hex 32
 2. **Account Enumeration Prevention**: Invalid email or invalid password attempts both return a generic `400 Bad Request` or `401 Unauthorized` with the uniform message `"Invalid email or password"`.
 3. **Stateless Sessions**: The REST API does not store session cookies or server-side session state (`SessionCreationPolicy.STATELESS`).
 4. **JWT Claims Discipline**: The JWT payload contains only minimal standard claims (`sub` = email, `iat` = issued at, `exp` = expiration). No password hashes or academic records are embedded into tokens.
+
+---
+
+## Subject & Task Management (Stage 5)
+
+All endpoints require `Authorization: Bearer <token>` and enforce strict authenticated student ownership.
+
+### Subject Endpoints (`/api/v1/subjects`)
+- `POST /api/v1/subjects`: Create a new course subject (validates unique course code & name per student).
+- `GET /api/v1/subjects`: List all subjects enrolled by the authenticated student.
+- `GET /api/v1/subjects/{id}`: Retrieve a single subject owned by the authenticated student (returns 404 if not owned).
+- `PUT /api/v1/subjects/{id}`: Update course details (credits 1–10, hex color, course code/name).
+- `DELETE /api/v1/subjects/{id}`: Delete a subject. Unlinks related tasks (`subject_id = null`), preserving student deliverables.
+
+### Task Endpoints (`/api/v1/tasks`)
+- `POST /api/v1/tasks`: Create a new task deliverable. If `subjectId` is provided, verifies student owns the subject.
+- `GET /api/v1/tasks`: List all tasks owned by the authenticated student (supports `?status=` and `?subjectId=` query filters, ordered by deadline ascending).
+- `GET /api/v1/tasks/{id}`: Retrieve a single task owned by the authenticated student (returns 404 if not owned).
+- `PUT /api/v1/tasks/{id}`: Update task title, description, deadline, difficulty, weight, estimated hours, and status.
+- `DELETE /api/v1/tasks/{id}`: Delete a task owned by the authenticated student.
+

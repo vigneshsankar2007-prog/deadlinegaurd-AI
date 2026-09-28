@@ -29,6 +29,21 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
     boolean existsByUserIdAndSubjectCode(Long userId, String subjectCode);
 
     /**
+     * Check if a subject name already exists for a student.
+     */
+    boolean existsByUserIdAndSubjectName(Long userId, String subjectName);
+
+    /**
+     * Check if a subject code already exists for a student excluding a specific subject ID (for updates).
+     */
+    boolean existsByUserIdAndSubjectCodeAndIdNot(Long userId, String subjectCode, Long id);
+
+    /**
+     * Check if a subject name already exists for a student excluding a specific subject ID (for updates).
+     */
+    boolean existsByUserIdAndSubjectNameAndIdNot(Long userId, String subjectName, Long id);
+
+    /**
      * Find subject by ID and student owner ID (for ownership verification).
      */
     Optional<Subject> findByIdAndUserId(Long id, Long userId);
