@@ -107,6 +107,6 @@ public class TaskController {
     ) {
         Long userId = getUserId(userDetails);
         taskService.deleteTask(id, userId);
-        return ResponseEntity.ok(ApiResponse.success("Task deleted successfully"));
+        return ResponseEntity.ok(ApiResponse.success("Task deleted successfully", null));
     }
 }

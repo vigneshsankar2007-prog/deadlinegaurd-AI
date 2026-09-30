@@ -26,6 +26,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      * Find student tasks filtered by current lifecycle status.
      */
     List<Task> findByUserIdAndStatus(Long userId, TaskStatus status);
+    
+    List<Task> findByUserIdAndSubjectIdAndStatusOrderByDeadlineAsc(Long userId, Long subjectId, TaskStatus status);
+    List<Task> findByUserIdAndSubjectIdOrderByDeadlineAsc(Long userId, Long subjectId);
+    List<Task> findByUserIdAndStatusOrderByDeadlineAsc(Long userId, TaskStatus status);
 
     /**
      * Find student tasks with deadline within a specific time window.

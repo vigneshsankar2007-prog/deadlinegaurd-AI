@@ -104,6 +104,6 @@ public class SubjectController {
     ) {
         Long userId = getUserId(userDetails);
         subjectService.deleteSubject(id, userId);
-        return ResponseEntity.ok(ApiResponse.success("Subject deleted successfully"));
+        return ResponseEntity.ok(ApiResponse.success("Subject deleted successfully", null));
     }
 }
