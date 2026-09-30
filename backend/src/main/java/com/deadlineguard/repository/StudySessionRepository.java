@@ -58,4 +58,26 @@ public interface StudySessionRepository extends JpaRepository<StudySession, Long
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end
     );
+
+    /**
+     * Sum total focus minutes completed by a student across all time.
+     */
+    @Query("SELECT COALESCE(SUM(s.durationMinutes), 0) FROM StudySession s " +
+           "WHERE s.user.id = :userId " +
+           "AND s.isCompleted = true")
+    int sumTotalStudyMinutesForUser(@Param("userId") Long userId);
+
+    /**
+     * Count completed focus sessions for a student.
+     */
+    long countByUserIdAndIsCompletedTrue(Long userId);
+
+    /**
+     * Sum focus minutes completed by a student for tasks under a specific course subject.
+     */
+    @Query("SELECT COALESCE(SUM(s.durationMinutes), 0) FROM StudySession s " +
+           "WHERE s.user.id = :userId " +
+           "AND s.task.subject.id = :subjectId " +
+           "AND s.isCompleted = true")
+    int sumStudyMinutesBySubjectId(@Param("userId") Long userId, @Param("subjectId") Long subjectId);
 }

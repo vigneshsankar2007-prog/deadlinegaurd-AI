@@ -265,6 +265,37 @@ Automated deadline countdown reminders, overdue alerts, high-priority warnings, 
 - `PATCH /api/v1/notifications/{id}/read`: Mark notification as read.
 - `PATCH /api/v1/notifications/read-all`: Mark all notifications as read for the authenticated student.
 
+---
+
+## Productivity Analytics & Insights (Stage 10)
+
+Production-quality analytics engine calculating task completion rates, overdue ratios, focus study hours, subject workload distributions, and 7-day chronological productivity trends.
+
+### 1. Analytics Endpoints (`Authorization: Bearer <token>` required)
+- `GET /api/v1/analytics/dashboard`: Student productivity overview (totalTasks, completedTasks, pendingTasks, overdueTasks, completionPercentage, overdueRate, totalStudyMinutes, totalStudyHours, averageSessionMinutes, currentProductivityScore, weeklyStudyMinutes, activeTaskCount, and criticalTaskCount).
+- `GET /api/v1/analytics/weekly`: Trailing 7-day chronological productivity metrics (date, tasksCompleted, tasksOverdue, studyMinutes, productivityScore).
+- `GET /api/v1/analytics/subjects`: Subject-wise workload, estimated hours, and completed focus study minutes.
+
+### 2. Metric Definitions & Formulas
+- **Completion Percentage**: `(completedTasks / totalTasks) * 100` (returns 0.0 if totalTasks == 0).
+- **Overdue Rate**: `(overdueTasks / totalTasks) * 100` (returns 0.0 if totalTasks == 0).
+- **Average Session Length**: `totalStudyMinutes / completedSessionCount` (returns 0.0 if no completed sessions).
+- **Total Study Hours**: `totalStudyMinutes / 60.0`.
+- **Productivity Score (0.00 – 100.00)**:
+  - `completionRatio = (tasksCompleted / totalTasksForThatDay) * 100`
+  - `overduePenalty = (tasksOverdue / totalTasksForThatDay) * 100`
+  - `studyComponent = min(100.0, (studyMinutes / 120.0) * 100.0)`
+  - `dailyScore = 0.50 * completionRatio + 0.20 * (100 - overduePenalty) + 0.30 * studyComponent`
+
+### 3. Productivity Stats Idempotence
+- Reuses the existing `productivity_stats` table with unique constraint `(user_id, stat_date)`.
+- Calculates/updates records idempotently without duplicate row generation.
+
+### 4. Security & Ownership
+- Strict multi-tenant isolation via JWT context. No `userId` is accepted from client parameters.
+- Querying another student's data is impossible.
+
+
 
 
 

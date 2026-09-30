@@ -37,6 +37,26 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByUserIdAndDeadlineBetween(Long userId, LocalDateTime start, LocalDateTime end);
 
     /**
+     * Find all tasks owned by a student.
+     */
+    List<Task> findByUserId(Long userId);
+
+    /**
+     * Count total tasks owned by a student.
+     */
+    long countByUserId(Long userId);
+
+    /**
+     * Count tasks owned by a student by status.
+     */
+    long countByUserIdAndStatus(Long userId, TaskStatus status);
+
+    /**
+     * Find tasks belonging to a specific subject owned by a student.
+     */
+    List<Task> findByUserIdAndSubjectId(Long userId, Long subjectId);
+
+    /**
      * Find task by ID and owner student ID (prevents cross-tenant access).
      */
     Optional<Task> findByIdAndUserId(Long id, Long userId);
