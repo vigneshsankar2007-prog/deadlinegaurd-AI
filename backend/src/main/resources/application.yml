@@ -27,6 +27,19 @@ jwt:
   secret: ${JWT_SECRET}
   expiration-ms: ${JWT_EXPIRATION_MS:86400000} # 24 hours
 
+# Google Gemini AI Configuration (Stage 7)
+gemini:
+  api-key: ${GOOGLE_API_KEY:}
+  model: ${GEMINI_MODEL:gemini-2.5-flash}
+  timeout-ms: ${GEMINI_TIMEOUT_MS:10000}
+
+# Smart Deadline Reminder & Notification System (Stage 9)
+deadlineguard:
+  notifications:
+    enabled: ${NOTIFICATIONS_ENABLED:true}
+    scan-cron: ${NOTIFICATIONS_SCAN_CRON:0 0 * * * *}
+    daily-summary-cron: ${DAILY_SUMMARY_CRON:0 30 7 * * *}
+
 # Actuator Health & Metrics
 management:
   endpoints:

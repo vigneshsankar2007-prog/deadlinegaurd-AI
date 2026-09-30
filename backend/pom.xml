@@ -82,6 +82,13 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- Google Gen AI Java SDK (Official Gemini API SDK) -->
+        <dependency>
+            <groupId>com.google.genai</groupId>
+            <artifactId>google-genai</artifactId>
+            <version>1.73.0</version>
+        </dependency>
+
         <!-- Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

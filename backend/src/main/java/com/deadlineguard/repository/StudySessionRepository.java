@@ -17,9 +17,24 @@ import java.util.Optional;
 public interface StudySessionRepository extends JpaRepository<StudySession, Long> {
 
     /**
+     * Find a study session only if it belongs to the given student.
+     */
+    Optional<StudySession> findByIdAndUserId(Long id, Long userId);
+
+    /**
      * Find all study sessions for a student ordered by newest first.
      */
     List<StudySession> findByUserIdOrderByStartTimeDesc(Long userId);
+
+    /**
+     * Find study sessions for a student filtered by completion status.
+     */
+    List<StudySession> findByUserIdAndIsCompletedOrderByStartTimeDesc(Long userId, Boolean isCompleted);
+
+    /**
+     * Find study sessions for a student tied to a specific task.
+     */
+    List<StudySession> findByUserIdAndTaskIdOrderByStartTimeDesc(Long userId, Long taskId);
 
     /**
      * Find all study sessions tied to a specific task.

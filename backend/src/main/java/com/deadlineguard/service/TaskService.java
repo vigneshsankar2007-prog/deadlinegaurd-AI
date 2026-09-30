@@ -34,6 +34,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final SubjectRepository subjectRepository;
     private final UserRepository userRepository;
+    private final PriorityCalculationService priorityCalculationService;
 
     /**
      * Create a new task strictly associated with the authenticated student.
@@ -70,6 +71,14 @@ public class TaskService {
                 .build();
 
         Task saved = taskRepository.save(task);
+
+        // Stage 6: Automatically compute and persist initial deterministic priority score
+        try {
+            priorityCalculationService.calculateAndPersistPriority(saved.getId(), userId);
+        } catch (Exception e) {
+            log.warn("Non-fatal: priority computation deferred for taskId: {}", saved.getId(), e);
+        }
+
         return TaskResponse.fromEntity(saved);
     }
 
@@ -144,6 +153,14 @@ public class TaskService {
         }
 
         Task updated = taskRepository.save(task);
+
+        // Stage 6: Automatically recompute and persist updated deterministic priority score
+        try {
+            priorityCalculationService.calculateAndPersistPriority(updated.getId(), userId);
+        } catch (Exception e) {
+            log.warn("Non-fatal: priority recalculation deferred for taskId: {}", updated.getId(), e);
+        }
+
         return TaskResponse.fromEntity(updated);
     }
 
